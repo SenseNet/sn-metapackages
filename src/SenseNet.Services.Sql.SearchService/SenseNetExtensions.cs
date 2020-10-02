@@ -32,6 +32,8 @@ namespace SenseNet.Extensions.DependencyInjection
 
                 // add package-specific repository components
                 repositoryBuilder
+                    .UseLogger(provider)
+                    .UseTracer(provider)
                     .UseSecurityDataProvider(new EFCSecurityDataProvider(connectionString: ConnectionStrings.ConnectionString))
                     .UseSecurityMessageProvider(new RabbitMQMessageProvider())
                     .UseLucene29CentralizedSearchEngineWithGrpc(grpcConfig);

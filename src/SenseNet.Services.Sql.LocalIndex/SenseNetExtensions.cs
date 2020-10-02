@@ -22,6 +22,8 @@ namespace SenseNet.Extensions.DependencyInjection
             {
                 // add package-specific repository components
                 repositoryBuilder
+                    .UseLogger(provider)
+                    .UseTracer(provider)
                     .UseSecurityDataProvider(
                         new EFCSecurityDataProvider(connectionString: ConnectionStrings.ConnectionString))
                     .UseLucene29LocalSearchEngine(Path.Combine(Environment.CurrentDirectory, "App_Data", "LocalIndex"));
