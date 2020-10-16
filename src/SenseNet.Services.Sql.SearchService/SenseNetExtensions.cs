@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SenseNet.Configuration;
 using SenseNet.ContentRepository;
+using SenseNet.ContentRepository.Components;
 using SenseNet.Search.Lucene29.Centralized.GrpcClient;
 using SenseNet.Security.EFCSecurityStore;
 using SenseNet.Security.Messaging.RabbitMQ;
@@ -36,11 +37,13 @@ namespace SenseNet.Extensions.DependencyInjection
                     .UseTracer(provider)
                     .UseSecurityDataProvider(new EFCSecurityDataProvider(connectionString: ConnectionStrings.ConnectionString))
                     .UseSecurityMessageProvider(new RabbitMQMessageProvider())
-                    .UseLucene29CentralizedSearchEngineWithGrpc(grpcConfig);
+                    .UseLucene29CentralizedSearchEngineWithGrpc(grpcConfig)
+                    .UseMsSqlExclusiveLockDataProviderExtension();
 
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
-            onRepositoryStartedAsync);
+            onRepositoryStartedAsync)
+                .AddComponent(provider => new MsSqlExclusiveLockComponent());
 
             return services;
         }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SenseNet.Configuration;
 using SenseNet.ContentRepository;
+using SenseNet.ContentRepository.Components;
 using SenseNet.Security.EFCSecurityStore;
 using Task = System.Threading.Tasks.Task;
 
@@ -26,11 +27,13 @@ namespace SenseNet.Extensions.DependencyInjection
                     .UseTracer(provider)
                     .UseSecurityDataProvider(
                         new EFCSecurityDataProvider(connectionString: ConnectionStrings.ConnectionString))
-                    .UseLucene29LocalSearchEngine(Path.Combine(Environment.CurrentDirectory, "App_Data", "LocalIndex"));
+                    .UseLucene29LocalSearchEngine(Path.Combine(Environment.CurrentDirectory, "App_Data", "LocalIndex"))
+                    .UseMsSqlExclusiveLockDataProviderExtension();
 
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
-            onRepositoryStartedAsync);
+            onRepositoryStartedAsync)
+                .AddComponent(provider => new MsSqlExclusiveLockComponent());
 
             return services;
         }
