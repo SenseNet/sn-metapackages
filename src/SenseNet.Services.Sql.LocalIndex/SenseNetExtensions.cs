@@ -40,62 +40,35 @@ namespace SenseNet.Extensions.DependencyInjection
 
         /// <summary>
         /// Registers sensenet middlewares.
-        /// If you want to inject a middleware after the user was authenticated, use the onAfterAuthentication method parameter. 
+        /// If you want to inject a middleware before or after one of the built-in middlewares, use the
+        /// <see cref="MiddlewareBuilder"/> parameter for defining application builder methods. 
         /// </summary>
-        /// <remarks>
-        /// Please note that some of the middlewares (e.g. OData) are branching the pipeline. That means you cannot register
-        /// a custom middleware that runs after them. To be able to that, you have to call the Use methods in this method
-        /// directly and specify an app builder branch there.
-        /// </remarks>
         /// <param name="app">The application builder instance.</param>
         /// <param name="middlewareBuilder">Defines optional custom middlewares that will be registered before
         /// or after certain sensenet middlewares (e.g. authentication or OData).</param>
         public static IApplicationBuilder UseSenseNet(this IApplicationBuilder app, MiddlewareBuilder middlewareBuilder = null)
         {
             middlewareBuilder?.OnBeforeCors?.Invoke(app);
-
-            // custom CORS policy
             app.UseSenseNetCors();
-
             middlewareBuilder?.OnAfterCors?.Invoke(app);
+            
             middlewareBuilder?.OnBeforeAuthentication?.Invoke(app);
-
-            // use Authentication and set User.Current
-            app.UseSenseNetAuthentication();
-
+            app.UseSenseNetAuthentication(); // use Authentication and set User.Current
             middlewareBuilder?.OnAfterAuthentication?.Invoke(app);
+
             middlewareBuilder?.OnBeforeMembershipExtenders?.Invoke(app);
-
             app.UseSenseNetMembershipExtenders();
-
             middlewareBuilder?.OnAfterMembershipExtenders?.Invoke(app);
 
+            // conditional, terminating middlewares
+
             app.UseSenseNetFiles(middlewareBuilder?.OnBeforeFiles, middlewareBuilder?.OnAfterFiles);
+
             app.UseSenseNetOdata(middlewareBuilder?.OnBeforeOData, middlewareBuilder?.OnAfterOData);
+
             app.UseSenseNetWopi(middlewareBuilder?.OnBeforeWopi, middlewareBuilder?.OnAfterWopi);
 
             return app;
         }
-    }
-
-    public class MiddlewareBuilder
-    {
-        public Action<IApplicationBuilder> OnBeforeCors { get; set; }
-        public Action<IApplicationBuilder> OnAfterCors { get; set; }
-
-        public Action<IApplicationBuilder> OnBeforeAuthentication { get; set; }
-        public Action<IApplicationBuilder> OnAfterAuthentication { get; set; }
-
-        public Action<IApplicationBuilder> OnBeforeMembershipExtenders { get; set; }
-        public Action<IApplicationBuilder> OnAfterMembershipExtenders { get; set; }
-
-        public Action<IApplicationBuilder> OnBeforeFiles { get; set; }
-        public Action<IApplicationBuilder> OnAfterFiles { get; set; }
-
-        public Action<IApplicationBuilder> OnBeforeOData { get; set; }
-        public Action<IApplicationBuilder> OnAfterOData { get; set; }
-
-        public Action<IApplicationBuilder> OnBeforeWopi { get; set; }
-        public Action<IApplicationBuilder> OnAfterWopi { get; set; }
     }
 }
