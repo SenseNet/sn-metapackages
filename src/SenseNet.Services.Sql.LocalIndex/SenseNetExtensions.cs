@@ -48,24 +48,55 @@ namespace SenseNet.Extensions.DependencyInjection
         /// directly and specify an app builder branch there.
         /// </remarks>
         /// <param name="app">The application builder instance.</param>
-        /// <param name="onAfterAuthentication">An app builder method that can be used to register middlewares after
-        /// authentication but before the main sensenet middlewares (e.g. OData).</param>
-        public static IApplicationBuilder UseSenseNet(this IApplicationBuilder app, Action<IApplicationBuilder> onAfterAuthentication = null)
+        /// <param name="middlewareBuilder">Defines optional custom middlewares that will be registered before
+        /// or after certain sensenet middlewares (e.g. authentication or OData).</param>
+        public static IApplicationBuilder UseSenseNet(this IApplicationBuilder app, MiddlewareBuilder middlewareBuilder = null)
         {
+            middlewareBuilder?.OnBeforeCors?.Invoke(app);
+
             // custom CORS policy
             app.UseSenseNetCors();
+
+            middlewareBuilder?.OnAfterCors?.Invoke(app);
+            middlewareBuilder?.OnBeforeAuthentication?.Invoke(app);
 
             // use Authentication and set User.Current
             app.UseSenseNetAuthentication();
 
-            onAfterAuthentication?.Invoke(app);
+            middlewareBuilder?.OnAfterAuthentication?.Invoke(app);
+            middlewareBuilder?.OnBeforeMembershipExtenders?.Invoke(app);
 
             app.UseSenseNetMembershipExtenders();
-            app.UseSenseNetFiles();
-            app.UseSenseNetOdata();
-            app.UseSenseNetWopi();
+
+            middlewareBuilder?.OnAfterMembershipExtenders?.Invoke(app);
+
+            //UNDONE: add after methods when the api is ready
+            app.UseSenseNetFiles(middlewareBuilder?.OnBeforeFiles);
+            app.UseSenseNetOdata(middlewareBuilder?.OnBeforeOData);
+            app.UseSenseNetWopi(middlewareBuilder?.OnBeforeWopi);
 
             return app;
         }
+    }
+
+    public class MiddlewareBuilder
+    {
+        public Action<IApplicationBuilder> OnBeforeCors { get; set; }
+        public Action<IApplicationBuilder> OnAfterCors { get; set; }
+
+        public Action<IApplicationBuilder> OnBeforeAuthentication { get; set; }
+        public Action<IApplicationBuilder> OnAfterAuthentication { get; set; }
+
+        public Action<IApplicationBuilder> OnBeforeMembershipExtenders { get; set; }
+        public Action<IApplicationBuilder> OnAfterMembershipExtenders { get; set; }
+
+        public Action<IApplicationBuilder> OnBeforeFiles { get; set; }
+        public Action<IApplicationBuilder> OnAfterFiles { get; set; }
+
+        public Action<IApplicationBuilder> OnBeforeOData { get; set; }
+        public Action<IApplicationBuilder> OnAfterOData { get; set; }
+
+        public Action<IApplicationBuilder> OnBeforeWopi { get; set; }
+        public Action<IApplicationBuilder> OnAfterWopi { get; set; }
     }
 }
