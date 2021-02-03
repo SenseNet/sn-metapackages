@@ -70,10 +70,9 @@ namespace SenseNet.Extensions.DependencyInjection
 
             middlewareBuilder?.OnAfterMembershipExtenders?.Invoke(app);
 
-            //UNDONE: add after methods when the api is ready
-            app.UseSenseNetFiles(middlewareBuilder?.OnBeforeFiles);
-            app.UseSenseNetOdata(middlewareBuilder?.OnBeforeOData);
-            app.UseSenseNetWopi(middlewareBuilder?.OnBeforeWopi);
+            app.UseSenseNetFiles(middlewareBuilder?.OnBeforeFiles, middlewareBuilder?.OnAfterFiles);
+            app.UseSenseNetOdata(middlewareBuilder?.OnBeforeOData, middlewareBuilder?.OnAfterOData);
+            app.UseSenseNetWopi(middlewareBuilder?.OnBeforeWopi, middlewareBuilder?.OnAfterWopi);
 
             return app;
         }
