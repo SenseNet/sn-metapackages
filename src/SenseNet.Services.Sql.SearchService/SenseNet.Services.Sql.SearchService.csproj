@@ -25,8 +25,9 @@
     <PackageReference Include="SenseNet.Search.Lucene29.Centralized.GrpcClient" Version="0.0.4.1" />
     <PackageReference Include="SenseNet.Security.EFCSecurityStore" Version="3.0.0" />
     <PackageReference Include="SenseNet.Security.Messaging.RabbitMQ" Version="1.2.0" />
-    <PackageReference Include="SenseNet.Services.Core" Version="0.0.20.1" />
+    <PackageReference Include="SenseNet.Services.Core" Version="0.0.20.2" />
     <PackageReference Include="SenseNet.Services.Wopi" Version="0.0.6" />
+    <PackageReference Include="SenseNet.WebHooks" Version="0.0.1.1" />
   </ItemGroup>
 
 </Project>

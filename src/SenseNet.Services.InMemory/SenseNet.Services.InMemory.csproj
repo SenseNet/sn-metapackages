@@ -20,10 +20,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.2.8" />
-    <PackageReference Include="SenseNet.ContentRepository.InMemory" Version="0.0.18.1" />
+    <PackageReference Include="SenseNet.ContentRepository.InMemory" Version="0.0.18.2" />
     <PackageReference Include="SenseNet.OData" Version="0.0.16" />
-    <PackageReference Include="SenseNet.Services.Core" Version="0.0.20.1" />
+    <PackageReference Include="SenseNet.Services.Core" Version="0.0.20.2" />
     <PackageReference Include="SenseNet.Services.Wopi" Version="0.0.6" />
+    <PackageReference Include="SenseNet.WebHooks" Version="0.0.1.1" />
   </ItemGroup>
 
 </Project>

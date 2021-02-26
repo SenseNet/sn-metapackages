@@ -33,7 +33,8 @@ namespace SenseNet.Extensions.DependencyInjection
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
             onRepositoryStartedAsync)
-                .AddComponent(provider => new MsSqlExclusiveLockComponent());
+                .AddComponent(provider => new MsSqlExclusiveLockComponent())
+                .AddSenseNetWebHooks();
 
             return services;
         }
