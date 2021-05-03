@@ -25,14 +25,16 @@ namespace SenseNet.Extensions.DependencyInjection
                 repositoryBuilder
                     .UseLogger(provider)
                     .UseTracer(provider)
-                    .UseSecurityDataProvider(
-                        new EFCSecurityDataProvider(connectionString: ConnectionStrings.ConnectionString))
                     .UseLucene29LocalSearchEngine(Path.Combine(Environment.CurrentDirectory, "App_Data", "LocalIndex"))
                     .UseMsSqlExclusiveLockDataProviderExtension();
 
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
             onRepositoryStartedAsync)
+                .AddEFCSecurityDataProvider(options =>
+                {
+                    options.ConnectionString = ConnectionStrings.ConnectionString;
+                })
                 .AddComponent(provider => new MsSqlExclusiveLockComponent())
                 .AddSenseNetWebHooks();
 

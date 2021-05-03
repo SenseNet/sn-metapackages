@@ -35,7 +35,6 @@ namespace SenseNet.Extensions.DependencyInjection
                 repositoryBuilder
                     .UseLogger(provider)
                     .UseTracer(provider)
-                    .UseSecurityDataProvider(new EFCSecurityDataProvider(connectionString: ConnectionStrings.ConnectionString))
                     .UseSecurityMessageProvider(new RabbitMQMessageProvider())
                     .UseLucene29CentralizedSearchEngineWithGrpc(grpcConfig)
                     .UseMsSqlExclusiveLockDataProviderExtension();
@@ -43,6 +42,10 @@ namespace SenseNet.Extensions.DependencyInjection
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
             onRepositoryStartedAsync)
+                .AddEFCSecurityDataProvider(options =>
+                {
+                    options.ConnectionString = ConnectionStrings.ConnectionString;
+                })
                 .AddComponent(provider => new MsSqlExclusiveLockComponent())
                 .AddSenseNetWebHooks();
 
