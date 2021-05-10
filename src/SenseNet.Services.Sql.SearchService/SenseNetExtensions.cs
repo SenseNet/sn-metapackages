@@ -42,6 +42,7 @@ namespace SenseNet.Extensions.DependencyInjection
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
             onRepositoryStartedAsync)
+                .AddSenseNetDataProvider()
                 .AddEFCSecurityDataProvider(options =>
                 {
                     options.ConnectionString = ConnectionStrings.ConnectionString;
