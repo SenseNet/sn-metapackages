@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using SenseNet.Configuration;
 using SenseNet.ContentRepository;
 using SenseNet.ContentRepository.Components;
-using SenseNet.Security.EFCSecurityStore;
 using Task = System.Threading.Tasks.Task;
 
 // ReSharper disable once CheckNamespace
@@ -31,7 +30,7 @@ namespace SenseNet.Extensions.DependencyInjection
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
             onRepositoryStartedAsync)
-                .AddSenseNetDataProvider()
+                .AddSenseNetMsSqlDataProvider()
                 .AddEFCSecurityDataProvider(options =>
                 {
                     options.ConnectionString = ConnectionStrings.ConnectionString;

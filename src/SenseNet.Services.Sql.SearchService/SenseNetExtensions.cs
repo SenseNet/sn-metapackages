@@ -7,7 +7,6 @@ using SenseNet.Configuration;
 using SenseNet.ContentRepository;
 using SenseNet.ContentRepository.Components;
 using SenseNet.Search.Lucene29.Centralized.GrpcClient;
-using SenseNet.Security.EFCSecurityStore;
 using SenseNet.Security.Messaging.RabbitMQ;
 using Task = System.Threading.Tasks.Task;
 
@@ -42,7 +41,7 @@ namespace SenseNet.Extensions.DependencyInjection
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
             onRepositoryStartedAsync)
-                .AddSenseNetDataProvider()
+                .AddSenseNetMsSqlDataProvider()
                 .AddEFCSecurityDataProvider(options =>
                 {
                     options.ConnectionString = ConnectionStrings.ConnectionString;
