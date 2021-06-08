@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>0.0.12.1</Version>
+    <Version>0.0.12.2</Version>
     <Authors>kavics,tusmester</Authors>
     <Company>Sense/Net Inc.</Company>
     <Copyright>Copyright © Sense/Net Inc.</Copyright>
@@ -20,14 +20,14 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.2.8" />
-    <PackageReference Include="SenseNet.OData" Version="0.0.18.1" />
+    <PackageReference Include="SenseNet.OData" Version="0.0.18.2" />
     <PackageReference Include="SenseNet.Search.Lucene29.Centralized" Version="1.4.2" />
     <PackageReference Include="SenseNet.Search.Lucene29.Centralized.GrpcClient" Version="0.0.5" />
     <PackageReference Include="SenseNet.Security.EFCSecurityStore" Version="3.0.1" />
     <PackageReference Include="SenseNet.Security.Messaging.RabbitMQ" Version="1.2.0" />
-    <PackageReference Include="SenseNet.Services.Core" Version="0.0.23.1" />
+    <PackageReference Include="SenseNet.Services.Core" Version="0.0.23.2" />
     <PackageReference Include="SenseNet.Services.Wopi" Version="0.0.8" />
-    <PackageReference Include="SenseNet.WebHooks" Version="0.0.5" />
+    <PackageReference Include="SenseNet.WebHooks" Version="0.0.5.1" />
   </ItemGroup>
 
 </Project>
