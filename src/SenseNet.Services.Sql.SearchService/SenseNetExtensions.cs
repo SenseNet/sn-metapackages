@@ -46,7 +46,9 @@ namespace SenseNet.Extensions.DependencyInjection
                 {
                     options.ConnectionString = ConnectionStrings.ConnectionString;
                 })
+                .AddSenseNetMsSqlStatisticalDataProvider()
                 .AddComponent(provider => new MsSqlExclusiveLockComponent())
+                .AddComponent(provider => new MsSqlStatisticsComponent())
                 .AddSenseNetWebHooks();
 
             return services;

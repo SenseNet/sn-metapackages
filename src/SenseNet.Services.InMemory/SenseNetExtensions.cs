@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SenseNet.ContentRepository;
+using SenseNet.ContentRepository.InMemory;
 using Task = System.Threading.Tasks.Task;
 
 // ReSharper disable once CheckNamespace
@@ -22,6 +23,7 @@ namespace SenseNet.Extensions.DependencyInjection
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
             onRepositoryStartedAsync)
+                .AddSenseNetInMemoryStatisticalDataProvider()
                 .AddSenseNetWebHooks();
 
             return services;
