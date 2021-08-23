@@ -23,7 +23,7 @@ namespace SenseNet.Extensions.DependencyInjection
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
             onRepositoryStartedAsync)
-                .AddSenseNetInMemoryStatisticalDataProvider()
+                .AddSenseNetInMemoryProviders()
                 .AddSenseNetWebHooks();
 
             return services;

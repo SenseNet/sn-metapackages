@@ -28,14 +28,10 @@ namespace SenseNet.Extensions.DependencyInjection
             // add default sensenet services
             services.AddSenseNet(configuration, (repositoryBuilder, provider) =>
             {
-                var grpcConfig = provider.GetService<IOptions<GrpcClientOptions>>().Value;
-
                 // add package-specific repository components
                 repositoryBuilder
                     .UseLogger(provider)
                     .UseTracer(provider)
-                    .UseSecurityMessageProvider(new RabbitMQMessageProvider())
-                    .UseLucene29CentralizedSearchEngineWithGrpc(grpcConfig)
                     .UseMsSqlExclusiveLockDataProviderExtension();
 
                 buildRepository?.Invoke(repositoryBuilder, provider);
@@ -47,6 +43,8 @@ namespace SenseNet.Extensions.DependencyInjection
                     options.ConnectionString = ConnectionStrings.ConnectionString;
                 })
                 .AddSenseNetMsSqlStatisticalDataProvider()
+                .AddLucene29CentralizedSearchEngineWithGrpc()
+                .AddRabbitMqSecurityMessageProvider()
                 .AddComponent(provider => new MsSqlExclusiveLockComponent())
                 .AddComponent(provider => new MsSqlStatisticsComponent())
                 .AddSenseNetWebHooks();
