@@ -43,10 +43,12 @@ namespace SenseNet.Extensions.DependencyInjection
                     options.ConnectionString = ConnectionStrings.ConnectionString;
                 })
                 .AddSenseNetMsSqlStatisticalDataProvider()
+                .AddSenseNetMsSqlClientStoreDataProvider()
                 .AddLucene29CentralizedSearchEngineWithGrpc()
                 .AddRabbitMqSecurityMessageProvider()
                 .AddComponent(provider => new MsSqlExclusiveLockComponent())
                 .AddComponent(provider => new MsSqlStatisticsComponent())
+                .AddComponent(provider => new MsSqlClientStoreComponent())
                 .AddSenseNetWebHooks();
 
             return services;
