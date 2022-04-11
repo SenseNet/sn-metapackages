@@ -3,9 +3,9 @@ using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using SenseNet.Configuration;
 using SenseNet.ContentRepository;
-using SenseNet.ContentRepository.Components;
 using Task = System.Threading.Tasks.Task;
 
 // ReSharper disable once CheckNamespace
@@ -17,6 +17,12 @@ namespace SenseNet.Extensions.DependencyInjection
             Action<RepositoryBuilder, IServiceProvider> buildRepository = null,
             Func<RepositoryInstance, IServiceProvider, Task> onRepositoryStartedAsync = null)
         {
+            // [sensenet]: Set options for EFCSecurityDataProvider
+            services.AddOptions<Security.EFCSecurityStore.Configuration.DataOptions>()
+                .Configure<IOptions<ConnectionStringOptions>>((securityOptions, systemConnections) =>
+                    securityOptions.ConnectionString = systemConnections.Value.Security);
+
+
             // add default sensenet services
             services.AddSenseNet(configuration, (repositoryBuilder, provider) =>
             {
@@ -24,22 +30,16 @@ namespace SenseNet.Extensions.DependencyInjection
                 repositoryBuilder
                     .UseLogger(provider)
                     .UseTracer(provider)
-                    .UseLucene29LocalSearchEngine(Path.Combine(Environment.CurrentDirectory, "App_Data", "LocalIndex"))
-                    .UseMsSqlExclusiveLockDataProviderExtension();
+                    .UseLucene29LocalSearchEngine(Path.Combine(Environment.CurrentDirectory, "App_Data", "LocalIndex"));
 
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
             onRepositoryStartedAsync)
-                .AddSenseNetMsSqlDataProvider()
-                .AddEFCSecurityDataProvider(options =>
+                .AddSenseNetMsSqlProviders(configureInstallation: installOptions =>
                 {
-                    options.ConnectionString = ConnectionStrings.ConnectionString;
+                    configuration.Bind("sensenet:install:mssql", installOptions);
                 })
-                .AddSenseNetMsSqlStatisticalDataProvider()
-                .AddSenseNetMsSqlClientStoreDataProvider()
-                .AddComponent(provider => new MsSqlExclusiveLockComponent())
-                .AddComponent(provider => new MsSqlStatisticsComponent())
-                .AddComponent(provider => new MsSqlClientStoreComponent())
+                .AddEFCSecurityDataProvider()
                 .AddSenseNetWebHooks();
 
             return services;

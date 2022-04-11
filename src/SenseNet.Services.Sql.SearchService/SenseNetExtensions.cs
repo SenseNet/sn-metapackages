@@ -5,9 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SenseNet.Configuration;
 using SenseNet.ContentRepository;
-using SenseNet.ContentRepository.Components;
 using SenseNet.Search.Lucene29.Centralized.GrpcClient;
-using SenseNet.Security.Messaging.RabbitMQ;
 using Task = System.Threading.Tasks.Task;
 
 // ReSharper disable once CheckNamespace
@@ -25,30 +23,30 @@ namespace SenseNet.Extensions.DependencyInjection
             if (configureGrpcClient != null)
                 services.Configure(configureGrpcClient);
 
+            // [sensenet]: Set options for EFCSecurityDataProvider
+            services.AddOptions<Security.EFCSecurityStore.Configuration.DataOptions>()
+                .Configure<IOptions<ConnectionStringOptions>>((securityOptions, systemConnections) =>
+                    securityOptions.ConnectionString = systemConnections.Value.Security);
+
+
             // add default sensenet services
             services.AddSenseNet(configuration, (repositoryBuilder, provider) =>
             {
                 // add package-specific repository components
                 repositoryBuilder
                     .UseLogger(provider)
-                    .UseTracer(provider)
-                    .UseMsSqlExclusiveLockDataProviderExtension();
+                    .UseTracer(provider);
 
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
             onRepositoryStartedAsync)
-                .AddSenseNetMsSqlDataProvider()
-                .AddEFCSecurityDataProvider(options =>
+                .AddSenseNetMsSqlProviders(configureInstallation: installOptions =>
                 {
-                    options.ConnectionString = ConnectionStrings.ConnectionString;
+                    configuration.Bind("sensenet:install:mssql", installOptions);
                 })
-                .AddSenseNetMsSqlStatisticalDataProvider()
-                .AddSenseNetMsSqlClientStoreDataProvider()
+                .AddEFCSecurityDataProvider()
                 .AddLucene29CentralizedSearchEngineWithGrpc()
                 .AddRabbitMqSecurityMessageProvider()
-                .AddComponent(provider => new MsSqlExclusiveLockComponent())
-                .AddComponent(provider => new MsSqlStatisticsComponent())
-                .AddComponent(provider => new MsSqlClientStoreComponent())
                 .AddSenseNetWebHooks();
 
             return services;
