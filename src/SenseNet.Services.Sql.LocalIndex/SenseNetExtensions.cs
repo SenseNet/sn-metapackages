@@ -3,9 +3,11 @@ using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SenseNet.Configuration;
 using SenseNet.ContentRepository;
+using SenseNet.Search.Lucene29;
 using Task = System.Threading.Tasks.Task;
 
 // ReSharper disable once CheckNamespace
@@ -26,11 +28,13 @@ namespace SenseNet.Extensions.DependencyInjection
             // add default sensenet services
             services.AddSenseNet(configuration, (repositoryBuilder, provider) =>
             {
+                var searchEngineLogger = repositoryBuilder.Services.GetService<ILogger<Lucene29SearchEngine>>();
+
                 // add package-specific repository components
                 repositoryBuilder
                     .UseLogger(provider)
-                    .UseTracer(provider)
-                    .UseLucene29LocalSearchEngine(Path.Combine(Environment.CurrentDirectory, "App_Data", "LocalIndex"));
+                    .UseLucene29LocalSearchEngine(searchEngineLogger, 
+                        Path.Combine(Environment.CurrentDirectory, "App_Data", "LocalIndex"));
 
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
@@ -40,7 +44,9 @@ namespace SenseNet.Extensions.DependencyInjection
                     configuration.Bind("sensenet:install:mssql", installOptions);
                 })
                 .AddEFCSecurityDataProvider()
-                .AddSenseNetWebHooks();
+                .AddSenseNetOData()
+                .AddSenseNetWebHooks()
+                .AddSenseNetWopi();
 
             return services;
         }

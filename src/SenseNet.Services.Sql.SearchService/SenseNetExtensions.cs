@@ -34,8 +34,7 @@ namespace SenseNet.Extensions.DependencyInjection
             {
                 // add package-specific repository components
                 repositoryBuilder
-                    .UseLogger(provider)
-                    .UseTracer(provider);
+                    .UseLogger(provider);
 
                 buildRepository?.Invoke(repositoryBuilder, provider);
             },
@@ -47,7 +46,9 @@ namespace SenseNet.Extensions.DependencyInjection
                 .AddEFCSecurityDataProvider()
                 .AddLucene29CentralizedSearchEngineWithGrpc()
                 .AddRabbitMqSecurityMessageProvider()
-                .AddSenseNetWebHooks();
+                .AddSenseNetOData()
+                .AddSenseNetWebHooks()
+                .AddSenseNetWopi();
 
             return services;
         }

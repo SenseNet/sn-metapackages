@@ -24,7 +24,9 @@ namespace SenseNet.Extensions.DependencyInjection
             },
             onRepositoryStartedAsync)
                 .AddSenseNetInMemoryProviders()
-                .AddSenseNetWebHooks();
+                .AddSenseNetOData()
+                .AddSenseNetWebHooks()
+                .AddSenseNetWopi();
 
             return services;
         }
