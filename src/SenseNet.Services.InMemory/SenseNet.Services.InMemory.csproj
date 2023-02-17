@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	<TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
-    <Version>0.0.22</Version>
+    <Version>0.0.22.1</Version>
     <Authors>kavics,tusmester</Authors>
     <Company>Sense/Net Inc.</Company>
     <Copyright>Copyright © Sense/Net Inc.</Copyright>
@@ -20,12 +20,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.2.8" />
-    <PackageReference Include="SenseNet.ContentRepository.InMemory" Version="0.0.29" />
-    <PackageReference Include="SenseNet.OData" Version="0.0.26" />
+    <PackageReference Include="SenseNet.ContentRepository.InMemory" Version="0.0.29.1" />
+    <PackageReference Include="SenseNet.OData" Version="0.0.26.1" />
     <PackageReference Include="SenseNet.OpenApi" Version="1.0.2" />
-    <PackageReference Include="SenseNet.Services.Core" Version="0.0.34" />
+    <PackageReference Include="SenseNet.Services.Core" Version="0.0.34.1" />
     <PackageReference Include="SenseNet.Services.Wopi" Version="0.0.12" />
-    <PackageReference Include="SenseNet.WebHooks" Version="0.0.12" />
+    <PackageReference Include="SenseNet.WebHooks" Version="0.0.12.1" />
   </ItemGroup>
 
 </Project>
