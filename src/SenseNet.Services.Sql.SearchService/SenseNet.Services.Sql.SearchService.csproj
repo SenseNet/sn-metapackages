@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	<TargetFrameworks>netstandard2.1;net6.0</TargetFrameworks>
-    <Version>0.0.22.2</Version>
+    <Version>0.0.22.3</Version>
     <Authors>kavics,tusmester</Authors>
     <Company>Sense/Net Inc.</Company>
     <Copyright>Copyright © Sense/Net Inc.</Copyright>
@@ -20,11 +20,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.2.8" />
-    <PackageReference Include="SenseNet.ContentRepository.MsSql" Version="0.0.4" />
+    <PackageReference Include="SenseNet.ContentRepository.MsSql" Version="0.0.4.1" />
     <PackageReference Include="SenseNet.OData" Version="0.0.26.2" />
     <PackageReference Include="SenseNet.OpenApi" Version="1.0.2" />
-    <PackageReference Include="SenseNet.Search.Lucene29.Centralized" Version="1.4.7" />
-    <PackageReference Include="SenseNet.Search.Lucene29.Centralized.GrpcClient" Version="0.0.10" />
+    <PackageReference Include="SenseNet.Search.Lucene29.Centralized" Version="1.4.7.1" />
+    <PackageReference Include="SenseNet.Search.Lucene29.Centralized.GrpcClient" Version="0.0.10.1" />
     <PackageReference Include="SenseNet.Security.EFCSecurityStore" Version="3.0.4.3" />
     <PackageReference Include="SenseNet.Security.Messaging.RabbitMQ" Version="1.2.2" />
     <PackageReference Include="SenseNet.Services.Core" Version="0.0.34.2" />
